@@ -1,0 +1,43 @@
+.dashboard {
+    padding: 24px;
+  
+    .header {
+      h1 {
+        font-size: 24px;
+        color: #333;
+      }
+    }
+  
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+  }
+  
+  .dashboardWrapper {
+    display: flex;
+    flex-direction: column; /* Navbar at the top */
+  }
+  
+  .mainContentWrapper {
+    display: flex;
+    flex: 1;
+  }
+  
+  .dashboardContent {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
