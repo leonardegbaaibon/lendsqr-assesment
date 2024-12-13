@@ -1,7 +1,6 @@
+// Sidebar.tsx
 import React, { useState } from 'react';
 import styles from './Sidebar.module.scss';
-
-// Importing SVGs as React components
 import  UsersIcon  from '../../assets/icons/users.svg';
 import  GuarantorsIcon  from '../../assets/icons/guarantors.svg';
 import  LoansIcon  from '../../assets/icons/loans.svg';
@@ -21,6 +20,7 @@ import SettlementsIcon from '../../assets/icons/settlements.svg';
 import ReportsIcon from '../../assets/icons/reports.svg';
 import FeesPricingIcon  from '../../assets/icons/fees-pricing.svg';
 import  AuditLogsIcon  from '../../assets/icons/audit-logs.svg';
+import  Home  from '../../assets/icons/home1.svg';
 
 interface SidebarItem {
   label: string;
@@ -35,13 +35,13 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activePath, onNavigate }) => {
   const [isOrgOpen, setOrgOpen] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleOrgToggle = () => {
-    setOrgOpen(!isOrgOpen);
-  };
+  const handleOrgToggle = () => setOrgOpen(!isOrgOpen);
+  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-  const renderMenuItems = (items: SidebarItem[]) => {
-    return items.map((item) => (
+  const renderMenuItems = (items: SidebarItem[]) =>
+    items.map((item) => (
       <li
         key={item.path}
         className={`${styles.menuItem} ${activePath === item.path ? styles.active : ''}`}
@@ -51,36 +51,38 @@ const Sidebar: React.FC<SidebarProps> = ({ activePath, onNavigate }) => {
         <span className={styles.label}>{item.label}</span>
       </li>
     ));
-  };
 
   return (
-    <nav className={styles.sidebar} aria-label="Main navigation">
-      <div className={styles.logo}>
-        <span>Lendsqr</span>
+    <>
+      <div className={styles.hamburger} onClick={toggleSidebar}>
+        ☰
       </div>
+      <nav
+        className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ''}`}
+        aria-label="Main navigation"
+      >
+        {/* <div className={styles.logo}>Logo</div> */}
 
-      {/* Switch Organization Dropdown */}
-      <div className={styles.switchOrg} onClick={handleOrgToggle}>
-        <span>Switch Organization</span>
-        <div className={styles.dropdownIcon}>
-          {isOrgOpen ? '▲' : '▼'} {/* Placeholder for dropdown indicator */}
-        </div>
-        {isOrgOpen && (
-          <div className={styles.dropdownMenu}>
-            <span>Organization 1</span>
-            <span>Organization 2</span>
-          </div>
-        )}
-      </div>
+        {/* Switch Organization Dropdown */}
+        {/* <div className={styles.switchOrg} onClick={handleOrgToggle}>
+          <span>Switch Organization</span>
+          <div className={styles.dropdownIcon}>{isOrgOpen ? '▲' : '▼'}</div>
+          {isOrgOpen && (
+            <div className={styles.dropdownMenu}>
+              <span>Organization 1</span>
+              <span>Organization 2</span>
+            </div>
+          )}
+        </div> */}
 
       <ul className={styles.menu}>
         {/* Dashboard */}
-        <li className={styles.menuItem}>
-          <span className={styles.label}>Dashboard</span>
-        </li>
+        {renderMenuItems([
+          { label: 'Dashboard', icon: <img src={Home} alt="" />, path: '/dashboard' },
+        ])}
 
         {/* Customers Section */}
-        <div className={styles.sectionTitle}>Customers</div>
+        <div className={styles.sectionTitle}>CUSTOMERS</div>
         {renderMenuItems([
           { label: 'Users', icon: <img src={UsersIcon} alt="" />, path: '/users' },
           { label: 'Guarantors', icon: <img src={GuarantorsIcon} alt="" />, path: '/guarantors' },
@@ -93,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activePath, onNavigate }) => {
         ])}
 
         {/* Businesses Section */}
-        <div className={styles.sectionTitle}>Businesses</div>
+        <div className={styles.sectionTitle}>BUSINESSES</div>
         {renderMenuItems([
           { label: 'Organization', icon: <img src={OrganizationIcon} alt="" />, path: '/organization' },
           { label: 'Loan Products', icon: <img src={LoanProductsIcon} alt="" />, path: '/loan-products' },
@@ -107,13 +109,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activePath, onNavigate }) => {
         ])}
 
         {/* Settings Section */}
-        <div className={styles.sectionTitle}>Settings</div>
+        <div className={styles.sectionTitle}>SETTINGS</div>
         {renderMenuItems([
           { label: 'Fees and Pricing', icon: <img src={FeesPricingIcon} alt="" />, path: '/fees-pricing' },
           { label: 'Audit Logs', icon: <img src={AuditLogsIcon}  alt="" />, path: '/audit-logs' },
         ])}
       </ul>
     </nav>
+    </>
   );
 };
 

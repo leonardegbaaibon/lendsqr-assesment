@@ -1,69 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store';
+import { fetchUsers } from '../../features/user/userSlice';
 import StatsCard from '../../components/StatsCard/StatsCard';
 import DataTable from '../../components/DataTable/DataTable';
-import Sidebar from '../../components/Sidebar/Sidebar'; // Import the Sidebar component
 import styles from './UsersDashboard.module.scss';
-import Navbar from '../../components/Topbar/Topbar';
+import Icon1 from '../../assets/icons/icon1.svg';
+import Icon2 from '../../assets/icons/icon2.svg';
+import Icon3 from '../../assets/icons/icon3.svg';
+import Icon4 from '../../assets/icons/icon4.svg';
+import Layout from '../../components/Layout/Layout';
 
 const UsersDashboard: React.FC = () => {
-  // Define the sidebar items
+  const dispatch: AppDispatch = useDispatch();
 
-  // State to manage the active path
-  const [activePath, setActivePath] = useState('/users');
+  // Access Redux state
+  const { users, loading, error } = useSelector((state: RootState) => state.user);
+  const activePath = useSelector((state: RootState) => state.sidebar.activePath); // Get the active path
 
-  // Function to handle navigation when a sidebar item is clicked
-  const handleNavigate = (path: string) => {
-    setActivePath(path);
-    // You can add logic for routing/navigation here if necessary
-  };
-
-  // Handle search query (just logging for now)
-  const handleSearch = (query: string) => {
-    console.log(query); // You can replace this with actual search functionality
-  };
-
-  // Profile image for the Navbar (use a placeholder or user image URL)
-  const profileImage = 'https://via.placeholder.com/150'; // Replace with actual image URL
+  // Fetch users on component mount
+  useEffect(() => {
+    if (activePath === '/users') {
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, activePath]);
 
   const stats = [
-    { title: 'Users', value: '223,453', icon: '👤', color: '#496F76' },
-    { title: 'Active Users', value: '2,453', icon: '🟢', color: '#34A853' },
-    { title: 'Users with Loans', value: '12,453', icon: '💰', color: '#FBBC05' },
-    { title: 'Users with Savings', value: '102,453', icon: '💵', color: '#4285F4' },
+    { title: 'USERS', value: `125`, icon: <img src={Icon1} alt="" />, color: 'white' },
+    { title: 'ACTIVE USERS', value: '2,453', icon: <img src={Icon2} alt="" />, color: 'white' },
+    { title: 'USERS WITH LOANS', value: '12,453', icon: <img src={Icon3} alt="" />, color: 'white' },
+    { title: 'USERS WITH SAVINGS', value: '102,453', icon: <img src={Icon4} alt="" />, color: 'white' },
   ];
 
-  const headers = ['Organization', 'Username', 'Email', 'Phone Number', 'Date Joined', 'Status'];
-  const data = [
-    { organization: 'Lendsqr', username: 'Adedeji', email: 'adedeji@lendsqr.com', phoneNumber: '08078093721', dateJoined: 'May 15, 2020', status: 'Inactive' },
-    { organization: 'Iron', username: 'Debby Ogana', email: 'debby2@iron.com', phoneNumber: '08160780928', dateJoined: 'Apr 30, 2020', status: 'Pending' },
-    // Add more data here...
-  ];
+  const headers = ['ORGANIZATION', 'USERNAME', 'EMAIL', 'PHONE NUMBER', 'DATE JOINED', 'STATUS'];
 
   return (
-    <div className={styles.dashboardWrapper}>
-      {/* Navbar at the top */}
-      <Navbar profileImage={profileImage} onSearch={handleSearch} />
+    <Layout>
+      <div className={styles.dashboardContent}>
+        <div className={styles.header}>
+          <h1>{activePath === '/users' ? 'Users' : 'Settings'}</h1>
+        </div>
 
-      <div className={styles.mainContentWrapper}>
-        {/* Sidebar on the left */}
-        <Sidebar activePath={activePath} onNavigate={handleNavigate} />
-
-        {/* Main content on the right */}
-        <div className={styles.dashboardContent}>
-          <div className={styles.header}>
-            <h1>Users</h1>
-          </div>
-
+        {activePath === '/users' && (
           <div className={styles.stats}>
             {stats.map((stat, index) => (
               <StatsCard key={index} {...stat} />
             ))}
           </div>
-
-          <DataTable headers={headers} data={data} />
-        </div>
+        )}
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error}</p>
+        ) : activePath === '/users' ? (
+          <div className={`${styles.tableWrapper}`}>
+            <DataTable headers={headers} data={users} />
+          </div>
+        ) : (
+          <div>Settings Content</div>
+        )}
       </div>
-    </div>
+    </Layout>
   );
 };
 
