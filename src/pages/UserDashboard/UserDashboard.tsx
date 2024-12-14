@@ -33,6 +33,7 @@ const UsersDashboard: React.FC = () => {
   ];
 
   const headers = ['ORGANIZATION', 'USERNAME', 'EMAIL', 'PHONE NUMBER', 'DATE JOINED', 'STATUS'];
+  
 
   return (
     <Layout>

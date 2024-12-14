@@ -46,14 +46,6 @@ const UserDetails = () => {
         </div>
       </div>
     </Layout>
-    // <div className={styles.dashboardWrapper}>
-    //   <Navbar profileImage="https://via.placeholder.com/150" onSearch={(query) => console.log(query)} />
-    //   <div className={styles.mainContentWrapper}>
-    //   <Sidebar activePath={''}Back to Users onNavigate={(path) => console.log('Navigate to:', path)} /> {/* Pass activePath to Sidebar */}
-
-    //   </div>
-
-    // </div>
   )
 }
 
